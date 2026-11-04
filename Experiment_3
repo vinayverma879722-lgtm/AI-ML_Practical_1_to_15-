@@ -1,0 +1,23 @@
+% Experiment 3: List Manipulation Operations
+
+% 1. Append Two Lists
+
+append_list([], L, L).
+
+append_list([H|T], L, [H|R]) :-
+    append_list(T, L, R).
+
+% 2. Reverse a List
+
+reverse_list([], []).
+
+reverse_list([H|T], R) :-
+    reverse_list(T, RT),
+    append_list(RT, [H], R).
+
+% 3. Search an Element in a List
+
+search_element(X, [X|_]).
+
+search_element(X, [_|T]) :-
+    search_element(X, T).
