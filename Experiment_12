@@ -1,0 +1,24 @@
+% Experiment 12: N-Queens Problem
+
+% Generate a list of numbers from 1 to N
+range(N, List) :-
+    numlist(1, N, List).
+
+% Check whether a queen is safe
+safe(_, []).
+safe(Q, [H|T]) :-
+    Q =\= H,
+    abs(Q - H) =\= 1,
+    safe(Q, T).
+
+% Solve N-Queens Problem
+n_queens(N, Solution) :-
+    range(N, Columns),
+    permutation(Columns, Solution),
+    safe_queens(Solution).
+
+% Check all queens
+safe_queens([]).
+safe_queens([Q|Rest]) :-
+    safe(Q, Rest),
+    safe_queens(Rest).
