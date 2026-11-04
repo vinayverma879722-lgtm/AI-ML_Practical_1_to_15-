@@ -1,0 +1,63 @@
+# Experiment 14: University Course Advisory System
+
+# Available Courses and Their Interests
+courses = {
+    "Artificial Intelligence": ["ai", "machine learning", "technology"],
+    "Data Science": ["data science", "statistics", "python"],
+    "Cyber Security": ["security", "networking", "hacking"],
+    "Web Development": ["web development", "html", "css"],
+    "Cloud Computing": ["cloud", "networking", "technology"],
+    "Internet of Things": ["iot", "electronics", "technology"],
+    "Robotics": ["robotics", "electronics", "ai"],
+    "Mobile App Development": ["mobile", "android", "programming"]
+}
+
+# Display Available Interests
+print("===== UNIVERSITY COURSE ADVISORY SYSTEM =====")
+
+print("\nAvailable Interests:")
+print("AI, Machine Learning, Data Science, Statistics")
+print("Security, Networking, Web Development, HTML, CSS")
+print("Cloud, Electronics, Robotics, Android, Programming")
+
+# Get Student Information
+name = input("\nEnter Student Name: ")
+
+interests = input(
+    "Enter your interests (separated by commas): "
+).lower().split(",")
+
+# Remove Extra Spaces
+interests = [interest.strip() for interest in interests]
+
+# Course Recommendation
+recommendations = []
+
+for course, skills in courses.items():
+
+    score = 0
+
+    for interest in interests:
+        if interest in skills:
+            score += 1
+
+    if score > 0:
+        recommendations.append((course, score))
+
+# Display Recommendations
+print("\n===== COURSE RECOMMENDATIONS =====")
+print("Student Name:", name)
+
+if recommendations:
+
+    recommendations.sort(key=lambda x: x[1], reverse=True)
+
+    print("\nRecommended Elective Courses:")
+
+    for course, score in recommendations:
+        print(course, "- Match Score:", score)
+
+else:
+    print("No matching courses found.")
+
+print("\nThank you for using the Course Advisory System!")
