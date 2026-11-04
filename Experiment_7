@@ -1,0 +1,57 @@
+% Experiment 7: Greedy Best-First Search
+
+% Graph Edges
+edge(a, b).
+edge(a, c).
+edge(b, d).
+edge(b, e).
+edge(c, f).
+edge(c, g).
+edge(d, h).
+edge(e, h).
+edge(f, h).
+edge(g, h).
+
+% Heuristic Values
+heuristic(a, 7).
+heuristic(b, 6).
+heuristic(c, 4).
+heuristic(d, 3).
+heuristic(e, 5).
+heuristic(f, 2).
+heuristic(g, 3).
+heuristic(h, 0).
+
+% Undirected Graph
+connected(X, Y) :- edge(X, Y).
+connected(X, Y) :- edge(Y, X).
+
+% Greedy Best-First Search
+greedy_bfs(Start, Goal, Path) :-
+    greedy_search([[Start]], Goal, ReversePath),
+    reverse(ReversePath, Path).
+
+% Goal Reached
+greedy_search([[Goal|Rest]|_], Goal, [Goal|Rest]).
+
+% Expand the Best Node
+greedy_search([Path|Queue], Goal, Result) :-
+    Path = [Current|_],
+    findall(
+        [Next|Path],
+        (connected(Current, Next),
+         \+ member(Next, Path)),
+        NewPaths
+    ),
+    append(Queue, NewPaths, AllPaths),
+    sort_paths(AllPaths, SortedPaths),
+    greedy_search(SortedPaths, Goal, Result).
+
+% Sort Paths According to Heuristic
+sort_paths(Paths, SortedPaths) :-
+    predsort(compare_paths, Paths, SortedPaths).
+
+compare_paths(Order, [A|_], [B|_]) :-
+    heuristic(A, HA),
+    heuristic(B, HB),
+    compare(Order, HA, HB).
