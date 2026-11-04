@@ -1,0 +1,42 @@
+% Experiment 11: Map Coloring Using CSP
+
+% Available Colors
+color(red).
+color(green).
+color(blue).
+
+% Adjacent Regions
+adjacent(a, b).
+adjacent(a, c).
+adjacent(b, c).
+adjacent(b, d).
+adjacent(c, d).
+adjacent(c, e).
+adjacent(d, e).
+
+% Check Both Directions
+connected(X, Y) :- adjacent(X, Y).
+connected(X, Y) :- adjacent(Y, X).
+
+% Check Color Constraint
+different(X, Y) :-
+    color(X),
+    color(Y),
+    X \= Y.
+
+% Map Coloring Rules
+map_coloring(A, B, C, D, E) :-
+
+    color(A),
+    color(B),
+    color(C),
+    color(D),
+    color(E),
+
+    different(A, B),
+    different(A, C),
+    different(B, C),
+    different(B, D),
+    different(C, D),
+    different(C, E),
+    different(D, E).
