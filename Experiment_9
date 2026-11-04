@@ -1,0 +1,30 @@
+% Experiment 9: Hill Climbing Algorithm
+
+% Objective Function
+value(X, Y) :-
+    Y is -((X - 5) * (X - 5)) + 25.
+
+% Generate Neighbouring States
+neighbor(X, N) :-
+    N is X + 1.
+
+neighbor(X, N) :-
+    N is X - 1.
+
+% Hill Climbing Algorithm
+hill_climb(Current, Best) :-
+    value(Current, CurrentValue),
+    findall(
+        V-N,
+        (neighbor(Current, N),
+         value(N, V),
+         V > CurrentValue),
+        Neighbors
+    ),
+    ( Neighbors = [] ->
+        Best = Current
+    ;
+        sort(Neighbors, Sorted),
+        last(Sorted, _-Next),
+        hill_climb(Next, Best)
+    ).
