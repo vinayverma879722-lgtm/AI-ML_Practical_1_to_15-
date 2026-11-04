@@ -1,0 +1,36 @@
+% Experiment 5: Student Performance Analysis
+
+% Student Marks
+marks(ujjwal, 95).
+marks(rahul, 75).
+marks(amit, 55).
+marks(priya, 35).
+marks(neha, 88).
+marks(rohit, 42).
+
+% Rules to Identify Student Performance
+
+% Topper: Marks greater than or equal to 85
+topper(X) :-
+    marks(X, M),
+    M >= 85.
+
+% Average Performer: Marks between 50 and 84
+average_performer(X) :-
+    marks(X, M),
+    M >= 50,
+    M < 85.
+
+% Failed Student: Marks below 40
+failed_student(X) :-
+    marks(X, M),
+    M < 40.
+
+% Find Student Marks
+student_marks(X, M) :-
+    marks(X, M).
+
+% Find All Passed Students
+passed_student(X) :-
+    marks(X, M),
+    M >= 40.
