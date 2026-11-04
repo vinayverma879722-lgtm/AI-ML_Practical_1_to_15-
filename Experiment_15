@@ -1,0 +1,86 @@
+# Experiment 15: Resolution and Unification in FOL
+
+# Unification Function
+def unify(x, y, substitution=None):
+
+    if substitution is None:
+        substitution = {}
+
+    if x == y:
+        return substitution
+
+    if isinstance(x, str) and x[0].islower():
+        substitution[x] = y
+        return substitution
+
+    if isinstance(y, str) and y[0].islower():
+        substitution[y] = x
+        return substitution
+
+    return None
+
+
+# Resolution Function
+def resolve(clause1, clause2):
+
+    for literal1 in clause1:
+        for literal2 in clause2:
+
+            if literal1[0] != literal2[0]:
+
+                if literal1[1] == literal2[1]:
+
+                    if literal1[2] == literal2[2]:
+                        continue
+
+                    if literal1[2] is None or literal2[2] is None:
+
+                        substitution = unify(
+                            literal1[2],
+                            literal2[2]
+                        )
+
+                        if substitution is not None:
+
+                            new_clause = (
+                                clause1 - {literal1}
+                            ) | (
+                                clause2 - {literal2}
+                            )
+
+                            return new_clause
+
+    return None
+
+
+# Knowledge Base in CNF
+clauses = [
+    {('~', 'Human', 'x'), ('+', 'Mortal', 'x')},
+    {('+', 'Human', 'socrates')},
+    {('~', 'Mortal', 'socrates')}
+]
+
+print("Knowledge Base:")
+for clause in clauses:
+    print(clause)
+
+# Apply Resolution
+print("\nApplying Resolution:")
+
+result = resolve(clauses[0], clauses[1])
+
+if result is not None:
+    print("Resolvent:", result)
+
+    final_result = resolve(
+        result,
+        clauses[2]
+    )
+
+    if final_result == set():
+        print("Empty Clause Derived: {}")
+        print("Theorem Proved Successfully!")
+    else:
+        print("Theorem could not be proved.")
+else:
+    print("Resolution Failed.")
