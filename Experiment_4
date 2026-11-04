@@ -1,0 +1,47 @@
+% Experiment 4: College Timetable Knowledge Base
+
+% Faculty Information
+faculty(amit, computer_science).
+faculty(rahul, mathematics).
+faculty(priya, physics).
+faculty(neha, chemistry).
+
+% Subject Information
+subject(ai, computer_science).
+subject(java, computer_science).
+subject(algebra, mathematics).
+subject(mechanics, physics).
+subject(organic_chemistry, chemistry).
+
+% Classroom Information
+classroom(ai, room101).
+classroom(java, room102).
+classroom(algebra, room103).
+classroom(mechanics, room104).
+classroom(organic_chemistry, room105).
+
+% Timetable Information
+timetable(monday, ai, 10, room101).
+timetable(monday, java, 11, room102).
+timetable(tuesday, algebra, 9, room103).
+timetable(wednesday, mechanics, 10, room104).
+timetable(thursday, organic_chemistry, 12, room105).
+
+% Rules
+
+% Find Faculty Teaching a Subject
+teaches(Faculty, Subject) :-
+    faculty(Faculty, Department),
+    subject(Subject, Department).
+
+% Find Classroom of a Subject
+room_of(Subject, Room) :-
+    classroom(Subject, Room).
+
+% Find Classes on a Particular Day
+classes_on(Day, Subject, Time, Room) :-
+    timetable(Day, Subject, Time, Room).
+
+% Find Faculty of a Subject
+faculty_of(Subject, Faculty) :-
+    teaches(Faculty, Subject).
