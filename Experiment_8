@@ -1,0 +1,55 @@
+% Experiment 8: A* Search Algorithm
+
+% Graph Edges with Costs
+edge(a, b, 1).
+edge(a, c, 4).
+edge(b, d, 2).
+edge(b, e, 5).
+edge(c, f, 3).
+edge(c, g, 6).
+edge(d, h, 4).
+edge(e, h, 2).
+edge(f, h, 2).
+edge(g, h, 3).
+
+% Heuristic Values
+heuristic(a, 7).
+heuristic(b, 6).
+heuristic(c, 4).
+heuristic(d, 4).
+heuristic(e, 2).
+heuristic(f, 2).
+heuristic(g, 3).
+heuristic(h, 0).
+
+% Undirected Graph
+connected(X, Y, C) :- edge(X, Y, C).
+connected(X, Y, C) :- edge(Y, X, C).
+
+% A* Search
+astar(Start, Goal, Path, Cost) :-
+    heuristic(Start, H),
+    astar_search([[H, 0, [Start]]], Goal, Path, Cost).
+
+% Goal Reached
+astar_search([[_, Cost, [Goal|Rest]]|_], Goal,
+             Path, Cost) :-
+    reverse([Goal|Rest], Path).
+
+% Expand Current Node
+astar_search([[_, G, [Current|Rest]]|Queue],
+             Goal, Path, Cost) :-
+    findall(
+        [F1, G1, [Next, Current|Rest]],
+        (
+            connected(Current, Next, C),
+            \+ member(Next, [Current|Rest]),
+            G1 is G + C,
+            heuristic(Next, H1),
+            F1 is G1 + H1
+        ),
+        NewPaths
+    ),
+    append(Queue, NewPaths, AllPaths),
+    sort(AllPaths, SortedPaths),
+    astar_search(SortedPaths, Goal, Path, Cost).
