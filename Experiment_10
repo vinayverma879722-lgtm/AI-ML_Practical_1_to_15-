@@ -1,0 +1,45 @@
+% Experiment 10: Simulated Annealing
+
+% Objective Function
+value(X, Y) :-
+    Y is X*X*X - 6*X*X + 9*X + 15.
+
+% Generate Neighbours
+neighbor(X, N) :-
+    N is X + 1.
+
+neighbor(X, N) :-
+    N is X - 1.
+
+% Hill Climbing Algorithm
+hill_climb(Current, Best) :-
+    value(Current, CV),
+    findall(V-N,
+        (neighbor(Current, N),
+         value(N, V),
+         V > CV),
+        Neighbors),
+    ( Neighbors = [] ->
+        Best = Current
+    ;
+        sort(Neighbors, Sorted),
+        last(Sorted, _-Next),
+        hill_climb(Next, Best)
+    ).
+
+% Simulated Annealing
+simulated_annealing(X, 0, _, X) :- !.
+
+simulated_annealing(X, T, Cooling, Best) :-
+    value(X, CurrentValue),
+    neighbor(X, Next),
+    value(Next, NextValue),
+    ( NextValue > CurrentValue ->
+        NewX = Next
+    ;
+        random_between(0, 100, R),
+        P is exp((NextValue-CurrentValue)/T)*100,
+        ( R < P -> NewX = Next ; NewX = X )
+    ),
+    NewT is T * Cooling,
+    simulated_annealing(NewX, NewT, Cooling, Best).
