@@ -1,0 +1,90 @@
+# Experiment 13: Blocks World Problem
+
+# Initial State
+on = {
+    ('A', 'B'),
+    ('B', 'C')
+}
+
+on_table = {'C'}
+
+# Function to find clear blocks
+def find_clear(on, on_table):
+    all_blocks = set(on_table)
+
+    for x, y in on:
+        all_blocks.add(x)
+        all_blocks.add(y)
+
+    covered = {y for x, y in on}
+
+    return all_blocks - covered
+
+
+# Function to check valid state
+def check_valid(on, on_table):
+
+    all_blocks = set(on_table)
+
+    for x, y in on:
+        all_blocks.add(x)
+        all_blocks.add(y)
+
+    # Check that a block is not on itself
+    for x, y in on:
+        if x == y:
+            return False
+
+    # Check that each block has only one support
+    supports = [x for x, y in on]
+
+    if len(supports) != len(set(supports)):
+        return False
+
+    # Check that no block is both on another block
+    # and directly on the table
+    for x, y in on:
+        if x in on_table:
+            return False
+
+    # Check that every block has a support
+    supported = set(on_table) | {x for x, y in on}
+
+    if supported != all_blocks:
+        return False
+
+    # Check that the arrangement has no cycle
+    for block in all_blocks:
+        visited = set()
+        current = block
+
+        while True:
+            if current in visited:
+                return False
+
+            visited.add(current)
+
+            below = [y for x, y in on if x == current]
+
+            if not below:
+                break
+
+            current = below[0]
+
+    return True
+
+
+# Display Blocks World State
+print("Blocks World State:")
+print("On:", on)
+print("On Table:", on_table)
+
+clear_blocks = find_clear(on, on_table)
+
+print("Clear Blocks:", clear_blocks)
+
+# Check State Validity
+if check_valid(on, on_table):
+    print("Result: Valid Stacking State")
+else:
+    print("Result: Invalid Stacking State")
