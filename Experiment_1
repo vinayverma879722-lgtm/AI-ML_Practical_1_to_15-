@@ -1,0 +1,25 @@
+% Experiment 1: Student-Course Knowledge Base
+
+% Facts
+student(ujjwal).
+student(rahul).
+student(amit).
+student(priya).
+
+course(ai).
+course(java).
+course(python).
+
+% Enrollment Facts
+enrolled(ujjwal, ai).
+enrolled(ujjwal, java).
+enrolled(rahul, python).
+enrolled(amit, ai).
+enrolled(priya, java).
+enrolled(priya, python).
+
+% Rules
+studies(X, Y) :-
+    enrolled(X, Y).
+
+% Query Section
